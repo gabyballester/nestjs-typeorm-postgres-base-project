@@ -2,6 +2,10 @@
 /dist
 /node_modules
 
+#files & folders
+*.doc*
+*.tmp*
+
 # Logs
 logs
 *.log
