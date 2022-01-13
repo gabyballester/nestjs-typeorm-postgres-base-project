@@ -3,7 +3,7 @@
 /node_modules
 
 #files & folders
-*.doc*
+*.docx
 *.tmp*
 
 # Logs

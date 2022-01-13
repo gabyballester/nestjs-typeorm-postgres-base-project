@@ -1,4 +1,4 @@
-export enum db {
+export enum Db {
   DB_DIALECT = 'DB_DIALECT',
   DB_HOST = 'DB_HOST',
   DB_PORT = 'DB_PORT',
