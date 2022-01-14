@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import * as cors from 'cors';
 import * as helmet from 'helmet';
 import * as compression from 'compression';
 import * as csurf from 'csurf';
@@ -12,6 +13,7 @@ const bootstrap = async () => {
   const { port, host, version } = AppModule;
   const globalPrefix = `/api/${version}`;
 
+  app.use(cors());
   app.setGlobalPrefix(globalPrefix)    
   app.useGlobalPipes(new ValidationPipe({
     transform: true,
@@ -29,7 +31,7 @@ const bootstrap = async () => {
   
   await app.listen(port);
   const serverUrl = `Server listening on http://${host}:${port+globalPrefix}`;
-  console.log(`Server listening on ${serverUrl}`);  
+  console.log(serverUrl);  
   app.use(csurf());
 }
 bootstrap();
