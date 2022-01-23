@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -53,6 +54,8 @@ export class UserService {
   async delete(id: number): Promise<DeleteResult> {
     const user = await this.userRepository.findOne({ id });
     if (!user) throw new NotFoundException;
-    return this.userRepository.delete(id);
+     const deleteResult = await this.userRepository.delete(id);
+     if(deleteResult.affected===0) throw new BadRequestException;
+     return deleteResult
   }
 }

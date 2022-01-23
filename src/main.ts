@@ -7,12 +7,14 @@ import * as rateLimit from 'express-rate-limit';
 import { ValidationPipe } from '@nestjs/common';
 
 import { AppModule } from './app.module';
+import { initSwagger } from './app.swagger';
 
 const bootstrap = async () => {
   const app = await NestFactory.create(AppModule);
   const { port, host, version } = AppModule;
   const globalPrefix = `/api/${version}`;
-
+  
+  initSwagger(app);
   app.use(cors());
   app.setGlobalPrefix(globalPrefix)    
   app.useGlobalPipes(new ValidationPipe({
