@@ -3,10 +3,18 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Key } from './common/enum';
 import { DatabaseModule } from './database/database.module';
 import { ApiModule } from './api/api.module';
-
+import { BcryptProvider } from './common/providers/bcrypt.provider';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), DatabaseModule, ApiModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: 'src/common/.env',
+    }),
+    DatabaseModule,
+    ApiModule
+  ],
+  providers: [BcryptProvider],
 })
 export class AppModule {
   static port: number;
@@ -14,8 +22,8 @@ export class AppModule {
   static version: string;
 
   constructor(private readonly configService: ConfigService) {
-    AppModule.port = +this.configService.get(Key.SERVER_PORT);
-    AppModule.host = this.configService.get(Key.SERVER_HOST);
-    AppModule.version = this.configService.get(Key.SERVER_VERSION);
+    AppModule.port = parseInt(this.configService.get<string>(Key.SERVER_PORT));
+    AppModule.host = this.configService.get<string>(Key.SERVER_HOST);
+    AppModule.version = this.configService.get<string>(Key.SERVER_VERSION);
   }
 }

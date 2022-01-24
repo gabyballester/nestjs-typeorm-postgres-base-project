@@ -5,6 +5,7 @@
 #files & folders
 *doc*
 *tmp*
+.env
 
 # Logs
 logs
