@@ -8,7 +8,7 @@ export class BcryptProvider {
     return await bcrypt.hash(password, salt);
   }
 
-  async decodePassword(password: string, userPass: string): Promise<boolean> {
+  async comparePasswords(password: string, userPass: string): Promise<boolean> {
     return await bcrypt.compare(password, userPass);
   }
 }

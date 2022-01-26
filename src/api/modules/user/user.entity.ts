@@ -20,11 +20,11 @@ export class UserEntity {
   @Column({ type: 'varchar', unique: true, length: 30, nullable: false })
   email: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: false, select: false })
+  @Column({ type: 'varchar', length: 255, nullable: false, select: true })
   password: string;
 
-  @Column({ type: Boolean, default: true, nullable: false })
-  status: boolean;
+  @Column({ type: Boolean, default: false, nullable: false })
+  active: boolean;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   @IsOptional()

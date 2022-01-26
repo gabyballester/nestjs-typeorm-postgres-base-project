@@ -1,9 +1,11 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BcryptProvider } from 'src/common/providers/bcrypt.provider';
 import { UserEntity } from '../user/user.entity';
 import { UserRepository } from '../user/user.repository';
-import { RegisterUserDto } from './dto';
+import { LoginUserDto, RegisterUserDto } from './dto';
+import { JwtPayloadInterface } from './interfaces';
 
 @Injectable()
 export class AuthService {
@@ -11,6 +13,7 @@ export class AuthService {
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
     private readonly bcryptProvider: BcryptProvider,
+    private jwtService: JwtService
   ) {}
   async register(registerUserDto: RegisterUserDto): Promise<UserEntity> {
     const { username, email, password } = registerUserDto;
@@ -29,4 +32,22 @@ export class AuthService {
     delete user.password;
     return user;
   }
+    
+  async login(loginUserDto: LoginUserDto): Promise<any> {
+    const { email, password } = loginUserDto;
+    const user: UserEntity =  await this.userRepository.findOne({email});
+    if(!user){ 
+      throw new NotFoundException(`User with email ${email} not found`);
+    }
+    
+    const emailMatches = await this.bcryptProvider.comparePasswords(password, user.password )
+    if(!emailMatches){
+      throw new UnauthorizedException('Wrong email, try again');
+    }
+    
+    const jwtPayload: JwtPayloadInterface = {id: user.id, email, active: user.active};
+    const accessToken = this.jwtService.sign(jwtPayload);
+    return {accessToken}
+  }
+
 }
