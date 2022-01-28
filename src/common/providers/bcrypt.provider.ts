@@ -10,5 +10,5 @@ export class BcryptProvider {
 
   async comparePasswords(password: string, userPass: string): Promise<boolean> {
     return await bcrypt.compare(password, userPass);
-  }
+  } 
 }
