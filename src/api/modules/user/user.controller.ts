@@ -37,14 +37,14 @@ export class UserController {
 
   @Put(':id')
   async edit(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() editUserDto: EditUserDto,
   ) {
     return await this.userService.edit(id, editUserDto);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string)  {
+  async delete(@Param('id') id: number)  {
     const {affected} = await this.userService.delete(id);
     const elementWord = affected===1? 'element' : 'elements'
     return {

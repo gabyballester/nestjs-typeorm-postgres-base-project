@@ -49,14 +49,14 @@ export class UserService {
     return user;
   }
 
-  async edit(id: string, editUserDto: EditUserDto): Promise<UserEntity> {
+  async edit(id: number, editUserDto: EditUserDto): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ id });
     if (!user) throw new NotFoundException('User not found');
     const editedUser = Object.assign(user, editUserDto);
     return await this.userRepository.save(editedUser);
   }
 
-  async delete(id: string): Promise<DeleteResult> {
+  async delete(id: number): Promise<DeleteResult> {
     const user = await this.userRepository.findOne({ id });
     if (!user) throw new NotFoundException();
     const deleteResult = await this.userRepository.delete(id);
