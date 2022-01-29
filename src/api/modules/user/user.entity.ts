@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 
 @Entity({ name: 'users' })
-@Unique(['username'])
+@Unique(['username','email'])
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -52,7 +52,12 @@ export class UserEntity {
 
   @Column({ type: 'varchar', nullable: true })
   @IsOptional()
-  NIF: string;
+  documentType: string;
+  
+  
+  @Column({ type: 'varchar', nullable: true })
+  @IsOptional()
+  documentNum: string;
 
   @Column({ type: 'varchar', nullable: true })
   @IsOptional()
@@ -64,3 +69,4 @@ export class UserEntity {
   @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
   updatedAt: Date;
 }
+
