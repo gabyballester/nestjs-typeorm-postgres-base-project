@@ -4,7 +4,7 @@ import * as helmet from 'helmet';
 import * as compression from 'compression';
 import * as csurf from 'csurf';
 import * as rateLimit from 'express-rate-limit';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 
 import { AppModule } from './app.module';
 import { initSwagger } from './app.swagger';
@@ -13,7 +13,8 @@ const bootstrap = async () => {
   const app = await NestFactory.create(AppModule);
   const { port, host, version } = AppModule;
   const globalPrefix = `/api/${version}`;
-  
+  const logger = new Logger();
+    
   initSwagger(app);
   app.use(cors());
   app.setGlobalPrefix(globalPrefix)    
@@ -33,7 +34,7 @@ const bootstrap = async () => {
   
   await app.listen(port);
   const serverUrl = `Server listening on http://${host}:${port+globalPrefix}`;
-  console.log(serverUrl);  
+  logger.log(serverUrl);  
   app.use(csurf());
 }
 bootstrap();
