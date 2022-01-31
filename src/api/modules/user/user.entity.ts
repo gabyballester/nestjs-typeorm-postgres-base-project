@@ -13,17 +13,16 @@ export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false, unique: true, length: 30 })
+  @Column({ type: 'varchar', nullable: false, unique: true, length: 30 })
   username: string;
 
-  @Column({ nullable: false, unique: true, length: 30 })
+  @Column({ nullable: false, unique: true })
   email: string;
 
-  // , select: true
-  @Column({ nullable: false, length: 255 })
+  @Column({ type: 'varchar', nullable: false, length: 255 })
   password: string;
 
-  @Column({ nullable: false, default: false })
+  @Column({ type: 'bool', nullable: false, default: false })
   active: boolean;
 
   // @Column({ length: 50, nullable: true })

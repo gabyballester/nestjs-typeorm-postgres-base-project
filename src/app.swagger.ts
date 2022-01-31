@@ -6,7 +6,7 @@ export const initSwagger = (app: INestApplication) => {
     .setTitle('Base API')
     .addBearerAuth()
     .setDescription(
-      'Esta es una API Creada con NestJS con un CRUD básico para un Blog.',
+      'Documentación de la API base para usar en los proyectos',
     )
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);

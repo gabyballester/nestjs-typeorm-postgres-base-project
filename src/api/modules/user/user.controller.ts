@@ -18,37 +18,37 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  async getAll() {
-    const users = await this.userService.getAll();
-    return { message: 'Users found', users }
+  async getAllUsers() {
+    const users = await this.userService.getAllUsersService();
+    return { message: 'Users found!!', users };
   }
 
   @Get(':id')
-  async getOne(@Param('id') id: string) {
-    const data = await this.userService.getOne(id);
-    return { message: 'User found', data}
+  async getOneUser(@Param('id') id: number) {
+    const data = await this.userService.getOneUserService(id);
+    return { message: `User id: ${id} found!!`, data };
   }
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
-    const data = await this.userService.create(createUserDto);
-    return { message: 'User created', data}
+  async createUser(@Body() createUserDto: CreateUserDto) {
+    const data = await this.userService.createUserService(createUserDto);
+    return { message: 'User created', data };
   }
 
   @Put(':id')
-  async edit(
-    @Param('id') id: number,
-    @Body() editUserDto: EditUserDto,
-  ) {
-    return await this.userService.edit(id, editUserDto);
+  async editUser(@Param('id') id: number, @Body() editUserDto: EditUserDto) {
+    return await this.userService.editUserService(id, editUserDto);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: number)  {
-    const {affected} = await this.userService.delete(id);
-    const elementWord = affected===1? 'element' : 'elements'
+  async deleteUser(@Param('id') id: number) {
+    const { affected } = await this.userService.deleteUserService(id);
+    const elementWord = affected === 1 ? 'element' : 'elements';
     return {
-      message: affected===0 ? `Not ${elementWord} deleted` : `Deleted ${affected} ${elementWord}`
-    }
+      message:
+        affected === 0
+          ? `Not ${elementWord} deleted`
+          : `Deleted ${affected} ${elementWord}`,
+    };
   }
 }

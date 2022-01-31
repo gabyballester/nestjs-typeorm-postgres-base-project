@@ -19,19 +19,19 @@ export class UserService {
     private readonly bcryptProvider: BcryptProvider,
   ) {}
 
-  async getAll(): Promise<UserEntity[]> {
+  async getAllUsersService(): Promise<UserEntity[]> {
     const users = await this.userRepository.find();
-    if (!users) throw new NotFoundException('No users found');
+    if (users.length===0) throw new NotFoundException('No users found');
     return users;
   }
 
-  async getOne(id: string): Promise<UserEntity> {
+  async getOneUserService(id: number): Promise<UserEntity> {
     const user = await this.userRepository.findOne(id);
-    if (!user) throw new NotFoundException('User not found');
+    if (!user) throw new NotFoundException(`User id: ${id} not found!!`);
     return user;
   }
 
-  async create(createUserDto: CreateUserDto): Promise<UserEntity> {
+  async createUserService(createUserDto: CreateUserDto): Promise<UserEntity> {
     const { username, email, password } = createUserDto;
 
     const usernameExists = await this.userRepository.findOne({ username });
@@ -49,16 +49,18 @@ export class UserService {
     return user;
   }
 
-  async edit(id: number, editUserDto: EditUserDto): Promise<UserEntity> {
+  async editUserService(
+    id: number,
+    editUserDto: EditUserDto,
+  ): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ id });
     if (!user) throw new NotFoundException('User not found');
     const editedUser = Object.assign(user, editUserDto);
     return await this.userRepository.save(editedUser);
   }
 
-  async delete(id: number): Promise<DeleteResult> {
-    const user = await this.userRepository.findOne({ id });
-    if (!user) throw new NotFoundException();
+  async deleteUserService(id: number): Promise<DeleteResult> {
+    await this.getOneUserService(id);
     const deleteResult = await this.userRepository.delete(id);
     if (deleteResult.affected === 0) throw new BadRequestException();
     return deleteResult;
