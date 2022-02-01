@@ -5,27 +5,30 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  Length,
   MaxLength,
 } from 'class-validator';
 import { EnumToString } from 'src/common/helpers/enumToString';
+import { Unique } from 'typeorm';
 import { PostCategory } from '../enums';
 
+@Unique(['slug', 'title'])
 export class CreatePostDto {
   @IsString()
-  slug: string;
+  @IsNotEmpty()
+  @Length(6, 100)
+  title: string;
   
   @IsString()
-  @IsNotEmpty()
-  @MaxLength(50)
-  title: string;
+  slug: string;
 
   @IsString()
   @IsOptional()
-  @MaxLength(50)
+  @Length(10,100)
   description: string;
 
   @IsString()
-  @IsOptional()
+  @Length(10,255)
   content: string;
 
   @IsNotEmpty()

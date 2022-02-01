@@ -2,6 +2,7 @@ import {
   IsArray,
   IsEnum,
   IsString,
+  Length,
 } from 'class-validator';
 import { EnumToString } from 'src/common/helpers/enumToString';
 import {
@@ -20,11 +21,11 @@ export class PostEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ type: 'varchar', nullable: false, unique: true, length: 100 })
+  title: string;
+  
   @Column({ type: 'text', nullable: false, unique: true })
   slug: string;
-
-  @Column({ type: 'varchar', nullable: false, unique: true, length: 50 })
-  title: string;
 
   @Column({ type: 'varchar', nullable: true, unique: false, length: 100 })
   description: string;
