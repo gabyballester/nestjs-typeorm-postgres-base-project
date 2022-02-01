@@ -5,8 +5,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  Length,
-  MaxLength,
+  Length
 } from 'class-validator';
 import { EnumToString } from 'src/common/helpers/enumToString';
 import { Unique } from 'typeorm';
