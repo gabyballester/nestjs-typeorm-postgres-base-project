@@ -21,7 +21,7 @@ export class UserService {
 
   async getAllUsersService(): Promise<UserEntity[]> {
     const users = await this.userRepository.find();
-    if (users.length===0) throw new NotFoundException('No users found');
+    if (users.length === 0) throw new NotFoundException('No users found');
     return users;
   }
 
@@ -55,8 +55,12 @@ export class UserService {
   ): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ id });
     if (!user) throw new NotFoundException('User not found');
-    const editedUser = Object.assign(user, editUserDto);
-    return await this.userRepository.save(editedUser);
+
+    const userToEdit = Object.assign(user, editUserDto);
+    const editedUser = await this.userRepository.save(userToEdit);
+
+    delete editedUser.password;
+    return editedUser;
   }
 
   async deleteUserService(id: number): Promise<DeleteResult> {
