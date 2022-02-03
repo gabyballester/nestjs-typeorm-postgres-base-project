@@ -3,7 +3,7 @@ export enum Key {
   SERVER_HOST = 'SERVER_HOST',
   SERVER_VERSION = 'SERVER_VERSION',
   NODE_ENV = 'NODE_ENV',
-  SECRET_KEY = 'SECRET_KEY',
-  ACCESS_TOKEN_EXPIRATION = "{ expiresIn: '1h' }",
-  REFRESH_TOKEN_EXPIRATION = "{ expiresIn: '1d' }"
+  SECRET_KEY = 'mysecretpassword',
+  ACCESS_TOKEN_EXP = '2h',
+  REFRESH_TOKEN_EXP = '1d'
 }

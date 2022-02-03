@@ -1,4 +1,3 @@
-import { Min } from 'class-validator';
 import {
   Column,
   CreateDateColumn,

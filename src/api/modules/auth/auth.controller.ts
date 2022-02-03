@@ -1,21 +1,47 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthDecorator, UserDecorator } from 'src/common/decorators';
 import { UserEntity } from '../user/user.entity';
 import { AuthService } from './auth.service';
-import { LoginUserDto, RegisterUserDto } from './dto';
+import { LocalAuthGuard } from './guards';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
-  @Post('/register')
-  register(@Body() registerUserDto: RegisterUserDto): Promise<UserEntity> {
-    return this.authService.register(registerUserDto);
+  @UseGuards(LocalAuthGuard)
+  @Post('login')
+  login(@UserDecorator() user: UserEntity) {
+    const data = this.authService.login(user);
+    return {
+      message: 'Login correcto!!',
+      data,
+    };
   }
 
-  @Post('/login')
-  login(@Body() loginUserDto: LoginUserDto): Promise<string> {
-    return this.authService.login(loginUserDto);
+  @AuthDecorator()
+  @Post('profile')
+  profile(@UserDecorator() user: UserEntity) {
+    return {
+      message: 'Petición correcta exitoso',
+      user,
+    };
   }
 }
+
+// import { UserEntity } from '../user/user.entity';
+// import { AuthService } from './auth.service';
+// import { LoginUserDto, RegisterUserDto } from './dto';
+
+//   constructor(private authService: AuthService) {}
+
+//   @Post('register')
+//   register(@Body() registerUserDto: RegisterUserDto): Promise<UserEntity> {
+//     return this.authService.register(registerUserDto);
+//   }
+
+//   @Post('login')
+//   login(@Body() loginUserDto: LoginUserDto): Promise<string> {
+//     return this.authService.login(loginUserDto);
+//   }
