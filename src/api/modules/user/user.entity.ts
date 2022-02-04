@@ -13,7 +13,7 @@ export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', nullable: false, unique: true, length: 30 })
+  @Column({ type: 'varchar', nullable: true, unique: true, length: 30 })
   username: string;
 
   @Column({ type: 'varchar', nullable: false, unique: true })

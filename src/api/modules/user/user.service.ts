@@ -31,22 +31,13 @@ export class UserService {
     if (!user) throw new NotFoundException(`User id: ${id} not found!!`);
     return user;
   }
-  
-  // async getOneUserByEmailService(email: string): Promise<UserEntity> {
-  //   const user = await this.userRepository.findOne({email});
-  //   if (!user) throw new NotFoundException(`User with: ${email} not found!!`);
-  //   return user;
-  // }
-  
-  async getOneUserByAnyProp(data: UserFindOne) {
+
+  async getOneUserByAnyPropService(data: UserFindOne) {
     return await this.userRepository
     .createQueryBuilder('user')
     .where(data)
     .addSelect('user.password')
     .getOne();
-    // const user = await this.userRepository.findOne({email});
-    // if (!user) throw new NotFoundException(`User with: ${email} not found!!`);
-    // return user;
   }
 
   async createUserService(createUserDto: CreateUserDto): Promise<UserEntity> {
