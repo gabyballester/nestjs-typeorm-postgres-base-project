@@ -2,10 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToOne,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
+import { PostEntity } from '../post/post.entity';
 
 @Entity({ name: 'users' })
 @Unique(['username', 'email'])
@@ -33,6 +35,9 @@ export class UserEntity {
 
   @Column({ type: 'varchar', nullable: true, length: 50 })
   surname2: string;
+
+  @OneToOne(() => PostEntity, (post) => post.owner, { cascade: true})
+  posts: PostEntity;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;

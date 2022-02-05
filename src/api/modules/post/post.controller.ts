@@ -9,6 +9,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthDecorator, UserDecorator } from 'src/common/decorators';
 import { CreatePostDto, EditPostDto } from './dtos';
 import { PostService } from './post.service';
 
@@ -29,9 +30,10 @@ export class PostController {
     return { message: 'Post found!!', data };
   }
 
+  @AuthDecorator()
   @Post()
-  async createPost(@Body() createPostDto: CreatePostDto) {
-    const data = await this.postService.createPostService(createPostDto);
+  async createPost(@Body() createPostDto: CreatePostDto, @UserDecorator() owner) {
+    const data = await this.postService.createPostService(createPostDto, owner);
     return { message: 'Post created!!', data };
   }
 

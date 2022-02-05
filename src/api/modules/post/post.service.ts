@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
+import { UserEntity } from '../user/user.entity';
 import { CreatePostDto, EditPostDto } from './dtos';
 import { PostEntity } from './post.entity';
 
@@ -27,8 +28,8 @@ export class PostService {
     return post;
   }
 
-  async createPostService(createPostDto: CreatePostDto): Promise<PostEntity> {
-    const post = this.postRepository.create(createPostDto);
+  async createPostService(createPostDto: CreatePostDto,  owner: UserEntity): Promise<PostEntity> {
+    const post = this.postRepository.create({...createPostDto, owner});
     return await this.postRepository.save(post);
   }
 

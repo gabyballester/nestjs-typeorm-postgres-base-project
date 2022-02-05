@@ -30,7 +30,7 @@ export class AuthController {
   @Post('profile')
   profile(@UserDecorator() user: UserEntity) {
     return {
-      message: 'Petición correcta exitoso',
+      message: 'Petición correcta!!',
       user,
     };
   }
