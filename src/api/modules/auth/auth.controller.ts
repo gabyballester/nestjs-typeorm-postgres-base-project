@@ -3,23 +3,23 @@ import { ApiTags } from '@nestjs/swagger';
 import { AuthDecorator, UserDecorator } from 'src/common/decorators';
 import { UserEntity } from '../user/user.entity';
 import { AuthService } from './auth.service';
-import { RegisterUserDto } from './dto';
+import { RegisterUserDto, TokenDto } from './dto';
 import { LocalAuthGuard } from './guards';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly _authService: AuthService) {}
 
   @Post('register')
   async registerUser(@Body() registerUserDto: RegisterUserDto) {
-    const data = await this.authService.registerUserService(registerUserDto);
+    const data = await this._authService.registerUserService(registerUserDto);
     return { message: 'User created', data };
   }
   @UseGuards(LocalAuthGuard)
   @Post('login')
   login(@UserDecorator() user: UserEntity) {
-    const data = this.authService.loginService(user);
+    const data = this._authService.loginService(user);
     return {
       message: 'Login correcto!!',
       data,
@@ -33,5 +33,10 @@ export class AuthController {
       message: 'Petición correcta!!',
       user,
     };
+  }
+
+  @Post('refresh-access-token')
+  async refreshAccessToken(@Body() tokenDto: TokenDto): Promise<any> {
+    return await this._authService.refreshAccessTokenService(tokenDto.refreshToken);
   }
 }

@@ -1,4 +1,4 @@
-export enum RoleType {
+export enum RoleName {
   SUDO = 'SUDO',
   ADMIN = 'ADMIN',
   MANAGER = 'MANAGER',

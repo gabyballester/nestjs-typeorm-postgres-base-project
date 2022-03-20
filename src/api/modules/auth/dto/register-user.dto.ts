@@ -1,8 +1,8 @@
-import { IsEmail, IsNotEmpty, IsString, Length, MaxLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Unique } from 'typeorm';
 
-@Unique(['username', 'email'])
+@Unique(['email'])
 export class RegisterUserDto {
   @ApiProperty()
   @IsNotEmpty()

@@ -1,36 +1,44 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  HttpStatus,
+  HttpException,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { UserEntity } from '../user/user.entity';
 import { BcryptProvider, JwtProvider } from 'src/common/providers';
-import { RegisterUserDto } from './dto';
+import { RegisterUserDto, UserAndTokensResponseDto } from './dto';
 import { UserRepository } from '../user/user.repository';
 import { FunctionsProvider } from 'src/common/providers/functions.provider';
-
+import * as moment from 'moment';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UserService,
-    private readonly bcryptProvider: BcryptProvider,
-    private readonly jwtProvider: JwtProvider,
-    private readonly userRepository: UserRepository,
-    private readonly functionsProvider: FunctionsProvider
+    private readonly _userService: UserService,
+    private readonly _bcryptProvider: BcryptProvider,
+    private readonly _jwtProvider: JwtProvider,
+    private readonly _userRepository: UserRepository,
+    private readonly _functionsProvider: FunctionsProvider,
   ) {}
-  
+
   async registerUserService(registerUserDto: RegisterUserDto): Promise<any> {
     const { email, password, repeatPassword } = registerUserDto;
 
     const passwordMatch = password === repeatPassword;
     if (!passwordMatch) throw new BadRequestException('Password must be equal');
 
-    const emailExists = await this.userService.getOneUserByAnyPropService({ email });
+    const emailExists = await this._userService.getOneUserByAnyPropService({
+      email,
+    });
     if (emailExists) throw new BadRequestException('Email already exists');
 
-    const newUser = this.userRepository.create(registerUserDto);
-    newUser.password = await this.bcryptProvider.encodePassword(password);
-     newUser.username = this.functionsProvider.extractUsernameByEmail(email);    
-    const user = await this.userRepository.save(newUser);
-    
+    const newUser = this._userRepository.create(registerUserDto);
+    newUser.password = await this._bcryptProvider.encodePassword(password);
+    newUser.username = this._functionsProvider.extractUsernameByEmail(email);
+    const user = await this._userRepository.save(newUser);
+
     delete user.password;
     return user;
   }
@@ -39,12 +47,12 @@ export class AuthService {
     email: string,
     password: string,
   ): Promise<UserEntity | null> {
-    const user = await this.userService.getOneUserByAnyPropService({ email });
+    const user = await this._userService.getOneUserByAnyPropService({ email });
     if (!user) {
       return null;
     }
 
-    const passwordMatch = await this.bcryptProvider.comparePasswords(
+    const passwordMatch = await this._bcryptProvider.comparePasswords(
       password,
       user.password,
     );
@@ -57,12 +65,29 @@ export class AuthService {
     return user;
   }
 
-  loginService(user: UserEntity) {
-    // agrego todas las propiedades a meter en el payload
+  loginService(user: UserEntity): UserAndTokensResponseDto {
     return {
       user,
-      accessToken: this.jwtProvider.createAccessToken(user),
-      refreshToken: this.jwtProvider.createRefreshToken(user)
+      accessToken: this._jwtProvider.createAccessToken(user),
+      refreshToken: this._jwtProvider.createRefreshToken(user),
     };
+  }
+
+  async refreshAccessTokenService(refreshToken: string): Promise<any> {
+    const { sub, exp } = await this._jwtProvider.verifyToken(refreshToken);
+    const currentDate = moment().unix();
+    if (currentDate > exp) {
+      throw new HttpException('Token expired', HttpStatus.UNAUTHORIZED);
+    } else {
+      const user = await this._userService.getOneUserByAnyPropService(sub);
+      if (!user) {
+        throw new NotFoundException(`User id: ${sub} not found!!`);
+      } else {
+        return {
+          accessToken: this._jwtProvider.createAccessToken(user),
+          refreshToken,
+        };
+      }
+    }
   }
 }

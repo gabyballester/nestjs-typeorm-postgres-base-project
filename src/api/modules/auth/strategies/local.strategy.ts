@@ -5,7 +5,7 @@ import { AuthService } from '../auth.service';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly authService: AuthService) {
+  constructor(private readonly _authService: AuthService) {
     super({
       usernameField: 'email', // puede ser 'username'
       passwordField: 'password', // puede ser 'passport'
@@ -13,9 +13,9 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(email: string, password: string) {
-    const user = await this.authService.validateUser(email, password);
+    const user = await this._authService.validateUser(email, password);
     if (!user)
-      throw new UnauthorizedException('Wrong credentials in local strategy');
+      throw new UnauthorizedException('Wrong login credentials');
     return user;
   }
 }

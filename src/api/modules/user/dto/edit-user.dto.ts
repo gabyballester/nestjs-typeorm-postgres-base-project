@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString, Length, MaxLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, Length, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Unique } from 'typeorm';
 
@@ -21,4 +21,10 @@ export class EditUserDto {
   @IsString()
   @MaxLength(255)
   readonly password: string;
+  
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  @MaxLength(50)
+  readonly avatar: string;
 }

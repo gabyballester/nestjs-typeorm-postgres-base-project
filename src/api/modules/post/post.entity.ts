@@ -1,18 +1,18 @@
-import { IsArray, IsEnum, IsString } from 'class-validator';
-import { EnumToString } from 'src/common/helpers/enumToString';
+import { IsArray, IsString } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
-import { PostCategory } from './enums';
+import { PostCategory } from './enum';
 
 @Entity({ name: 'posts' })
-// @Unique(['slug', 'title'])
+@Unique(['slug', 'title'])
 export class PostEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -29,15 +29,17 @@ export class PostEntity {
   @Column({ type: 'varchar', nullable: true, unique: false, length: 255 })
   content: string;
 
-  @IsEnum(PostCategory, {
-    message: `Invalid option. Valid options are ${EnumToString(PostCategory)}`,
+  @ManyToOne(() => UserEntity, (user) => user.posts, {
+    eager: false,
+    nullable: false,
   })
-  @ManyToOne(() => UserEntity, (user) => user.posts, { eager: false, nullable: false})
   owner: UserEntity;
 
   // @JoinColumn({name: 'author' })
   // author: UserEntity;
-
+  // @IsEnum(PostCategory, {
+  //   message: `Invalid option. Valid options are ${EnumToString(PostCategory)}`,
+  // })
   @Column({ type: 'enum', nullable: true, enum: PostCategory })
   category: PostCategory;
 

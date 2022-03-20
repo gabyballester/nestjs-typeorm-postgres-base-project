@@ -13,24 +13,24 @@ import { PostEntity } from './post.entity';
 export class PostService {
   constructor(
     @InjectRepository(PostEntity)
-    private readonly postRepository: Repository<PostEntity>
+    private readonly _postRepository: Repository<PostEntity>
   ) {}
 
   async getAllPostsService(): Promise<PostEntity[]> {
-    const posts = await this.postRepository.find();
+    const posts = await this._postRepository.find();
     if (posts.length===0) throw new NotFoundException('No posts found');
     return posts;
   }
 
   async getOnePostService(id: number): Promise<PostEntity> {
-    const post = await this.postRepository.findOne(id);
+    const post = await this._postRepository.findOne(id);
     if (!post) throw new NotFoundException(`Post id: ${id}, not found`);
     return post;
   }
 
   async createPostService(createPostDto: CreatePostDto,  owner: UserEntity): Promise<PostEntity> {
-    const post = this.postRepository.create({...createPostDto, owner});
-    return await this.postRepository.save(post);
+    const post = this._postRepository.create({...createPostDto, owner});
+    return await this._postRepository.save(post);
   }
 
   async editPostService(
@@ -39,12 +39,12 @@ export class PostService {
   ): Promise<PostEntity> {
     const post = await this.getOnePostService(id);
     const editedPost = Object.assign(post, editPostDto);
-    return await this.postRepository.save(editedPost);
+    return await this._postRepository.save(editedPost);
   }
 
   async deletePostService(id: number): Promise<DeleteResult> {
     await this.getOnePostService(id);
-    const deleteResult = await this.postRepository.delete(id);
+    const deleteResult = await this._postRepository.delete(id);
     if (deleteResult.affected === 0) throw new BadRequestException();
     return deleteResult;
   }

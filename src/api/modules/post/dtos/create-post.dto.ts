@@ -9,7 +9,7 @@ import {
 } from 'class-validator';
 import { EnumToString } from 'src/common/helpers/enumToString';
 import { Unique } from 'typeorm';
-import { PostCategory } from '../enums';
+import { PostCategory } from '../enum';
 
 @Unique(['slug', 'title'])
 export class CreatePostDto {

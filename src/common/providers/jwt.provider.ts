@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { RefreshAccessTokenInterface } from 'src/api/modules/auth/interface';
 import { UserEntity } from 'src/api/modules/user/user.entity';
 import { Key } from '../enum';
 
@@ -10,7 +11,7 @@ export class JwtProvider {
   createAccessToken(user: UserEntity) {
     const payload = {
       sub: user.id,
-      suername: user.username,
+      username: user.username,
       email: user.email,
       active: user.active,
     };
@@ -19,7 +20,7 @@ export class JwtProvider {
       expiresIn: Key.ACCESS_TOKEN_EXP,
     });
   }
-  
+
   createRefreshToken(user: UserEntity) {
     const payload = {
       sub: user.id,
@@ -28,5 +29,9 @@ export class JwtProvider {
     return this.jwtService.sign(payload, {
       expiresIn: Key.REFRESH_TOKEN_EXP,
     });
+  }
+
+  verifyToken(token: string): any {
+    return this.jwtService.decode(token);
   }
 }
