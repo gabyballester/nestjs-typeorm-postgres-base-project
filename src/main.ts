@@ -36,5 +36,7 @@ const bootstrap = async () => {
   const serverUrl = `Server listening on http://${host}:${port+globalPrefix}`;
   logger.log(serverUrl);  
   app.use(csurf());
+   
 }
+
 bootstrap();

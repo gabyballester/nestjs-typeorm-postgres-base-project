@@ -6,7 +6,7 @@ import {
   IsString,
   Length,
 } from 'class-validator';
-import { RoleStatusEnum, RoleName } from '../enum';
+import { RoleStatusEnum, RoleName } from '../enums';
 import { EnumToString } from 'src/common/helpers/enumToString';
 
 export class CreateRoleDto {

@@ -9,7 +9,7 @@ export const DatabaseProvider: DynamicModule = TypeOrmModule.forRootAsync({
   inject: [ConfigService],
    
   async useFactory(config: ConfigService) {
-    const EnvGetter = (prop) => {
+    const EnvGetter = (prop: string) => {
       return config.get<string>(prop)
     }
     const isDevelopmentEnv =

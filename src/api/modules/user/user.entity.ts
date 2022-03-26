@@ -29,7 +29,7 @@ export class UserEntity {
   password: string;
 
   @Column({ type: 'bool', nullable: false, default: false })
-  active: boolean;
+  isActive: boolean;
 
   @Column({ type: 'varchar', nullable: true, length: 30 })
   name: string;

@@ -8,7 +8,7 @@ import {
 import { UserService } from '../user/user.service';
 import { UserEntity } from '../user/user.entity';
 import { BcryptProvider, JwtProvider } from 'src/common/providers';
-import { RegisterUserDto, UserAndTokensResponseDto } from './dto';
+import { RegisterUserDto, UserAndTokensResponseDto } from './dtos';
 import { UserRepository } from '../user/user.repository';
 import { FunctionsProvider } from 'src/common/providers/functions.provider';
 import * as moment from 'moment';

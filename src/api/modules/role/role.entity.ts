@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { RoleStatusEnum, RoleName } from './enum';
+import { RoleStatusEnum, RoleName } from './enums';
 import {
   BaseEntity,
   Entity,
@@ -10,9 +10,10 @@ import {
   OneToMany,
 } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
+import { IRole } from './interfaces/role.interface';
 
 @Entity('roles')
-export class RoleEntity extends BaseEntity {
+export class RoleEntity extends BaseEntity implements IRole {
   
   @PrimaryGeneratedColumn('increment')
   id: number;

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString, Length } from 'class-validator';
-import { RoleName } from '../enum';
+import { RoleName } from '../enums';
 import { EnumToString } from 'src/common/helpers/enumToString';
 
 export class EditRoleDto {

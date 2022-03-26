@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { RefreshAccessTokenInterface } from 'src/api/modules/auth/interface';
 import { UserEntity } from 'src/api/modules/user/user.entity';
 import { Key } from '../enum';
 
@@ -13,7 +12,7 @@ export class JwtProvider {
       sub: user.id,
       username: user.username,
       email: user.email,
-      active: user.active,
+      active: user.isActive,
     };
 
     return this.jwtService.sign(payload, {
